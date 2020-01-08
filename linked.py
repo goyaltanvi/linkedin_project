@@ -9,6 +9,7 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 import selenium.webdriver.common.keys
+import re
 
 browser=webdriver.Chrome("C:/Users/tanvi/Desktop/python/chromedriver_win32/chromedriver.exe")
 browser.get('https://www.linkedin.com/')
@@ -23,9 +24,9 @@ password=browser.find_element_by_xpath('//*[@id="password"]')
 login=browser.find_element_by_xpath('//*[@id="app__container"]/main/div/form/div[3]/button')
 
 ActionChains(browser).move_to_element(email).click()\
-     .send_keys('tanvigoyal036@gmail.com')\
+     .send_keys('enter your mail-id')\
      .move_to_element(password).click()\
-     .send_keys('Tanu@225')\
+     .send_keys('enter your password')\
      .perform()
      
 ActionChains(browser).move_to_element(login).click().perform()
@@ -37,8 +38,23 @@ ActionChains(browser).move_to_element(search_engine).click()\
       .perform()
 search=browser.find_element_by_xpath('//*[@id="ember29"]/div[2]')
 ActionChains(browser).move_to_element(search).click().perform()
-
-
-content=browser.find_element_by_id('ember793')
-
-ActionChains(browser).move_to_element(content).click().perform()
+button=browser.find_element_by_tag('button')
+see_more = []
+for elem in button:
+     if elem.text == '…see more':
+          see_more.append(elem)
+for x in see_more:
+     x.click()
+     time.sleep(1)
+html.send_keys(Keys.HOME)
+time.sleep(1)
+try:
+     all_text = browser.find_element_by_xpath('/html/body/div[5]/div[4]/div[3]/div/div[2]/div/div[2]/div/div/div/div/ul').text
+except :
+     all_text = browser.find_element_by_xpath('/html/body/div[6]/div[4]/div[3]/div/div[2]/div/div[2]/div/div/div/div/ul').text
+email = re.findall(r'\S+@\S+', all_text)
+f = open('test.txt', 'a+')
+for i in email: 
+      f.write(i)
+      f.write("\n")
+f.close()    
